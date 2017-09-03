@@ -1,0 +1,18 @@
+{
+    "env": {
+        "browser": true,
+        "es6": true,
+        "node": true
+    },
+    "extends": "standard",
+    "parserOptions": {
+        "ecmaVersion": 6
+    },
+    "rules": {
+        "semi": ["error", "never"],
+        "prefer-arrow-callback": "error",
+        "no-var": "error",
+        "prefer-template": "error",
+        "indent": ["error", 4]
+    }
+}

@@ -1,0 +1,31 @@
+{
+  "name": "obstacle",
+  "version": "1.0.0",
+  "description": "An obstacle game",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/j-villasante/obstacle.git"
+  },
+  "keywords": [
+    "game"
+  ],
+  "author": "Josué Villasante",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/j-villasante/obstacle/issues"
+  },
+  "homepage": "https://github.com/j-villasante/obstacle#readme",
+  "dependencies": {
+    "express": "^4.15.4",
+    "nunjucks": "^3.0.1"
+  },
+  "devDependencies": {
+    "browser-sync": "^2.18.13",
+    "gulp": "^3.9.1",
+    "gulp-nodemon": "^2.2.1"
+  }
+}
