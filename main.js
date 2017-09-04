@@ -12,6 +12,7 @@ nunjucks.configure('views', {
 })
 
 app.set('view engine', 'njk')
+app.use(express.static('static/dist'))
 
 config(app, controllers)
 

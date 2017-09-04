@@ -1,4 +1,4 @@
-function config (app, controllers) {
+function config (app, controllers) {    
     app.get('/', controllers.home.show)
 }
 

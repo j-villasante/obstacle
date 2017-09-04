@@ -1,14 +1,23 @@
 const gulp = require('gulp')
 const nodemon = require('gulp-nodemon')
 const browserSync = require('browser-sync').create()
+const browserify = require('browserify');
+const source = require('vinyl-source-stream');
+const buffer = require('vinyl-buffer');
+const uglify = require('gulp-uglify');
+const sourcemaps = require('gulp-sourcemaps');
+const gutil = require('gulp-util');
+const babel = require('gulp-babel');
+const cleanCSS = require('gulp-clean-css');
 
 gulp.task('default', ['nodemon', 'browser-sync'])
 
-gulp.task('nodemon', () => {
-	var demon = nodemon({
+gulp.task('nodemon', ['bundle'], () => {
+	let demon = nodemon({
 		script: 'main.js',
-		ignore: [],
+		ignore: ['./static/dist/'],
 		ext: 'njk js css',
+        tasks: ['bundle'],
 		env: {
 			NODE_ENV: 'development'
 		},
@@ -37,4 +46,32 @@ gulp.task('browser-sync', () => {
 		},
 		open: false
 	})
+})
+
+gulp.task('bundle', () => {
+    let b = browserify({
+        entries: './static/src/app.js',
+        debug: true
+    });
+
+    return b.bundle()
+        .pipe(source('bundle.js'))
+        .pipe(buffer())
+        .pipe(sourcemaps.init({loadMaps: true}))
+        // Add transformation tasks to the pipeline here.
+        // .pipe(babel({
+        //     presets: ['es2015']
+        // }))
+        //     .pipe(uglify())
+        //     .on('error', gutil.log)
+        .pipe(sourcemaps.write('./'))
+        .pipe(gulp.dest('./static/dist/js/'));
+})
+
+gulp.task('css', () => {
+    return gulp.src('./static/css/*.css')
+        .pipe(sourcemaps.init())
+        .pipe(cleanCSS())
+        .pipe(sourcemaps.write('./'))
+        .pipe(gulp.dest('./static/dist/css/'));
 })
