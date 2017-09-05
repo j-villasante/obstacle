@@ -13,6 +13,10 @@ class Utils {
     getRandomInt (min, max) {
         return Math.floor(Math.random() * (max - min + 1)) + min
     }
+
+    getDistanceBewteenPoints (a, b) {
+        return Math.hypot(a.x - b.x, a.y - b.y)
+    }
 }
 
 module.exports = new Utils()

@@ -36,6 +36,16 @@ class BallController {
         }
     }
 
+    detectColision () {
+        for (let ball of this.balls) {
+            let distance = utils.getDistanceBewteenPoints(this.staticBall.centerPoint, ball.centerPoint)
+            if (distance <= ball.radius + this.staticBall.radius) {
+                return true
+            }
+        }
+        return false
+    }
+
     createStaticBall () {
         this.staticBall = new Ball(this.ctx, 25, 25, 15)
     }

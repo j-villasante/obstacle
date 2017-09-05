@@ -17,6 +17,13 @@ class Ball {
         this.vy = vy
     }
 
+    get centerPoint () {
+        return {
+            x: this.x,
+            y: this.y
+        }
+    }
+
     setPosition (x, y) {
         this.x = x
         this.y = y
@@ -77,6 +84,16 @@ class BallController {
         }
     }
 
+    detectColision () {
+        for (let ball of this.balls) {
+            let distance = utils.getDistanceBewteenPoints(this.staticBall.centerPoint, ball.centerPoint)
+            if (distance <= ball.radius + this.staticBall.radius) {
+                return true
+            }
+        }
+        return false
+    }
+
     createStaticBall () {
         this.staticBall = new Ball(this.ctx, 25, 25, 15)
     }
@@ -117,7 +134,15 @@ class Main {
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height)
         this.controller.moveBalls()
         this.controller.render()
-        window.requestAnimationFrame(() => this.animate())
+        if (this.controller.detectColision()) {
+            this.ctx.fillStyle = 'rgba(255, 255, 255, 0.8)'
+            this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height)
+            this.ctx.fillStyle = '#FF0000'
+            this.ctx.font = '48px serif'
+            this.ctx.fillText('Game over', 0, 100)
+        } else {
+            window.requestAnimationFrame(() => this.animate())
+        }
     }
 
     start () {
@@ -153,6 +178,10 @@ class Utils {
      */
     getRandomInt (min, max) {
         return Math.floor(Math.random() * (max - min + 1)) + min
+    }
+
+    getDistanceBewteenPoints (a, b) {
+        return Math.hypot(a.x - b.x, a.y - b.y)
     }
 }
 

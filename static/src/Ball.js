@@ -16,6 +16,13 @@ class Ball {
         this.vy = vy
     }
 
+    get centerPoint () {
+        return {
+            x: this.x,
+            y: this.y
+        }
+    }
+
     setPosition (x, y) {
         this.x = x
         this.y = y

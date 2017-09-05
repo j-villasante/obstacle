@@ -18,7 +18,15 @@ class Main {
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height)
         this.controller.moveBalls()
         this.controller.render()
-        window.requestAnimationFrame(() => this.animate())
+        if (this.controller.detectColision()) {
+            this.ctx.fillStyle = 'rgba(255, 255, 255, 0.8)'
+            this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height)
+            this.ctx.fillStyle = '#FF0000'
+            this.ctx.font = '48px serif'
+            this.ctx.fillText('Game over', 0, 100)
+        } else {
+            window.requestAnimationFrame(() => this.animate())
+        }
     }
 
     start () {
