@@ -24,9 +24,7 @@ class BallController {
     }
 
     moveBalls () {
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
         for (let ball of this.balls) {
-            ball.draw()
             if (ball.y + ball.vy + ball.radius > this.canvas.height || ball.y + ball.vy - ball.radius < 0) {
                 ball.vy = -ball.vy
             }
@@ -36,6 +34,22 @@ class BallController {
             }
             ball.move()
         }
+    }
+
+    createStaticBall () {
+        this.staticBall = new Ball(this.ctx, 25, 25, 15)
+    }
+
+    moveBallOnMouseMove (e) {
+        let rect = this.canvas.getBoundingClientRect()
+        this.staticBall.setPosition(e.clientX - rect.left, e.clientY - rect.top)
+    }
+
+    render () {
+        for (let ball of this.balls) {
+            ball.draw()
+        }
+        this.staticBall.draw()
     }
 }
 

@@ -16,6 +16,11 @@ class Ball {
         this.vy = vy
     }
 
+    setPosition (x, y) {
+        this.x = x
+        this.y = y
+    }
+
     move () {
         this.x += this.vx
         this.y += this.vy
