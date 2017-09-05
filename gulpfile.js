@@ -61,9 +61,9 @@ gulp.task('bundle', () => {
         // Add transformation tasks to the pipeline here.
         // .pipe(babel({
         //     presets: ['es2015']
-        // }))
-        //     .pipe(uglify())
-        //     .on('error', gutil.log)
+        // }))  
+        // .pipe(uglify())
+        // .on('error', gutil.log)
         .pipe(sourcemaps.write('./'))
         .pipe(gulp.dest('./static/dist/js/'));
 })
