@@ -1,3 +1,16 @@
 canvas {
-    border: 1px solid black;
+    border-top: 1px solid black;
+    cursor: none;
+}
+
+body {
+    height: 100vh;
+    width: 100vw;
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+
+* {
+   margin: 0px;
+   padding: 0px;
 }

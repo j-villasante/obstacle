@@ -6,6 +6,8 @@ class Ball {
         this.radius = r
         this.color = this.getRandomColor()
         this.ctx = context
+        this.loading = true
+        this.setLoadingState()
     }
 
     getRandomColor () {
@@ -30,8 +32,15 @@ class Ball {
     }
 
     move () {
+        if (this.loading) return
         this.x += this.vx
         this.y += this.vy
+    }
+
+    setLoadingState () {
+        setTimeout(() => {
+            this.loading = false
+        }, 1000)
     }
 
     draw () {
@@ -87,7 +96,7 @@ class BallController {
     detectColision () {
         for (let ball of this.balls) {
             let distance = utils.getDistanceBewteenPoints(this.staticBall.centerPoint, ball.centerPoint)
-            if (distance <= ball.radius + this.staticBall.radius) {
+            if (!ball.loading && distance <= ball.radius + this.staticBall.radius) {
                 return true
             }
         }
@@ -119,6 +128,8 @@ const BallController = require('./BallController.js')
 class Main {
     constructor () {
         this.canvas = document.getElementById('canvas')
+        this.canvas.width = document.body.clientWidth
+        this.canvas.height = document.body.clientHeight - document.getElementById('content').offsetHeight
         this.spanScore = document.getElementById('span-balls')
         this.ctx = this.canvas.getContext('2d')
         this.ballCount = 3
@@ -189,11 +200,6 @@ class Main {
     }
 
     start () {
-        // this.controller.addBall(this.ballCount)
-        // this.controller.createStaticBall()
-        // this.runTimer()
-        // this.addBallsInterval(5000)
-        // this.animate(this.controller)
         this.startGame()
         this.canvas.addEventListener('mousemove', e => this.controller.moveBallOnMouseMove(e))
     }

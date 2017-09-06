@@ -1,4 +1,5 @@
 const gulp = require('gulp')
+const demon = require('nodemon');
 const nodemon = require('gulp-nodemon')
 const browserSync = require('browser-sync').create()
 const browserify = require('browserify');
@@ -9,15 +10,17 @@ const sourcemaps = require('gulp-sourcemaps');
 const gutil = require('gulp-util');
 const babel = require('gulp-babel');
 const cleanCSS = require('gulp-clean-css');
+const runSequence = require('run-sequence');
 
-gulp.task('default', ['nodemon', 'browser-sync'])
 
-gulp.task('nodemon', ['bundle'], () => {
-	let demon = nodemon({
+gulp.task('default', ['nodemon', 'browser-sync', 'watchers'])
+
+gulp.task('nodemon', () => {
+	nodemon({
 		script: 'main.js',
-		ignore: ['./static/dist/'],
-		ext: 'njk js css',
-        tasks: ['bundle'],
+		ignore: ['./static/'],
+		ext: 'njk js',
+        // tasks: ['bundle'],
 		env: {
 			NODE_ENV: 'development'
 		},
@@ -25,27 +28,32 @@ gulp.task('nodemon', ['bundle'], () => {
 			js: "node --inspect"
 		}
 	})
-
-	demon
-		.on('start', () => {
-			browserSync.reload()
-		})
-		.on('crash', () => {
-			console.error('Application has crashed!\n')
-			demon.emit('restart', 10)
-		})
+    .on('start', () => {
+    	browserSync.reload()
+    })
+    .on('crash', () => {
+    	console.error('Application has crashed!\n')
+    	demon.emit('restart', 10)
+    })
 })
 
 gulp.task('browser-sync', () => {
 	browserSync.init({
 		proxy: 'localhost:3000',
 		port: 3001,
-		reloadDelay: 1500,
+		reloadDelay: 500,
 		ui: {
 			port: 3002
 		},
 		open: false
 	})
+})
+
+gulp.task('reload', () => demon.emit('restart'))
+
+gulp.task('watchers', () => {
+    gulp.watch('./static/src/**/*.js', () =>  runSequence('bundle', 'reload'))
+    gulp.watch('./static/css/**/*.css', () =>  runSequence('css', 'reload'))
 })
 
 gulp.task('bundle', () => {

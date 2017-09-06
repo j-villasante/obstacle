@@ -5,6 +5,8 @@ class Ball {
         this.radius = r
         this.color = this.getRandomColor()
         this.ctx = context
+        this.loading = true
+        this.setLoadingState()
     }
 
     getRandomColor () {
@@ -29,8 +31,15 @@ class Ball {
     }
 
     move () {
+        if (this.loading) return
         this.x += this.vx
         this.y += this.vy
+    }
+
+    setLoadingState () {
+        setTimeout(() => {
+            this.loading = false
+        }, 1000)
     }
 
     draw () {

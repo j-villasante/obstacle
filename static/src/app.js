@@ -3,6 +3,8 @@ const BallController = require('./BallController.js')
 class Main {
     constructor () {
         this.canvas = document.getElementById('canvas')
+        this.canvas.width = document.body.clientWidth
+        this.canvas.height = document.body.clientHeight - document.getElementById('content').offsetHeight
         this.spanScore = document.getElementById('span-balls')
         this.ctx = this.canvas.getContext('2d')
         this.ballCount = 3
@@ -73,11 +75,6 @@ class Main {
     }
 
     start () {
-        // this.controller.addBall(this.ballCount)
-        // this.controller.createStaticBall()
-        // this.runTimer()
-        // this.addBallsInterval(5000)
-        // this.animate(this.controller)
         this.startGame()
         this.canvas.addEventListener('mousemove', e => this.controller.moveBallOnMouseMove(e))
     }
