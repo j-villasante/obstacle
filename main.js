@@ -1,8 +1,11 @@
 const express = require('express')
 const nunjucks = require('nunjucks')
+const session = require('express-session')
 
-const config = require('./routes.js').config
+const setup = require('./routes.js').setup
 const controllers = require('./controllers')
+
+const config = require('./configs.js')[process.env.NODE_ENV]
 
 const app = express()
 
@@ -11,10 +14,14 @@ nunjucks.configure('views', {
     express: app
 })
 
-app.set('view engine', 'njk')
+if (process.env.NODE_ENV === 'production') {
+    app.set('trust proxy', 1)
+}
+app.use(session(config.session))
 app.use(express.static('static/dist'))
+app.set('view engine', 'njk')
 
-config(app, controllers)
+setup(app, controllers)
 
 app.listen(process.env.PORT || 3000, () => {
     console.log(`Example app listening on port ${process.env.PORT || 3000}!`)

@@ -1,3 +1,6 @@
+static/dist/js
+static/dist/css
+
 # Created by https://www.gitignore.io/api/node,linux,macos,bower,windows,webstorm,sublimetext
 
 ### Bower ###

@@ -1,5 +1,5 @@
-function config (app, controllers) {    
+function setup (app, controllers) {
     app.get('/', controllers.home.show)
 }
 
-module.exports.config = config
+module.exports.setup = setup

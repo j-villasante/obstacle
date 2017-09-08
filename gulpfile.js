@@ -1,17 +1,22 @@
-const gulp = require('gulp')
+// Dev build dependencies
 const demon = require('nodemon');
 const nodemon = require('gulp-nodemon')
 const browserSync = require('browser-sync').create()
+const sourcemaps = require('gulp-sourcemaps');
+
+// Prod build dependencies
 const browserify = require('browserify');
 const source = require('vinyl-source-stream');
 const buffer = require('vinyl-buffer');
 const uglify = require('gulp-uglify');
-const sourcemaps = require('gulp-sourcemaps');
-const gutil = require('gulp-util');
+const gulp = require('gulp')
 const babel = require('gulp-babel');
 const cleanCSS = require('gulp-clean-css');
 const runSequence = require('run-sequence');
+const gulpif = require('gulp-if');
+const lazypipe = require('lazypipe');
 
+let prod = false;
 
 gulp.task('default', ['nodemon', 'browser-sync', 'watchers'])
 
@@ -59,27 +64,34 @@ gulp.task('watchers', () => {
 gulp.task('bundle', () => {
     let b = browserify({
         entries: './static/src/app.js',
-        debug: true
+        debug: !prod
     });
+
+    let devPipe = lazypipe()
+        .pipe(sourcemaps.init, {loadMaps: true})
+        .pipe(sourcemaps.write, './')
+    
+    let prodPipe = lazypipe()
+        .pipe(babel, { presets: ['es2015'] })
+        .pipe(uglify)
 
     return b.bundle()
         .pipe(source('bundle.js'))
         .pipe(buffer())
-        .pipe(sourcemaps.init({loadMaps: true}))
-        // Add transformation tasks to the pipeline here.
-        // .pipe(babel({
-        //     presets: ['es2015']
-        // }))  
-        // .pipe(uglify())
-        // .on('error', gutil.log)
-        .pipe(sourcemaps.write('./'))
+        .pipe(gulpif(prod, prodPipe(), devPipe()))
         .pipe(gulp.dest('./static/dist/js/'));
 })
 
 gulp.task('css', () => {
     return gulp.src('./static/css/*.css')
-        .pipe(sourcemaps.init())
-        .pipe(cleanCSS())
-        .pipe(sourcemaps.write('./'))
-        .pipe(gulp.dest('./static/dist/css/'));
+    .pipe(gulpif(!prod, sourcemaps.init()))
+    .pipe(cleanCSS())
+    .pipe(gulpif(!prod, sourcemaps.write('./')))
+    .pipe(gulp.dest('./static/dist/css/'))
 })
+
+gulp.task('set-prod', () => prod = true)
+
+gulp.task('build', ['bundle', 'css'])
+
+gulp.task('prod', () => runSequence('set-prod', 'build'))
