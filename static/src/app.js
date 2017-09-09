@@ -1,4 +1,5 @@
 const BallController = require('./BallController.js')
+const game = require('./Game.js')
 
 class Main {
     constructor () {
@@ -9,7 +10,7 @@ class Main {
         this.ctx = this.canvas.getContext('2d')
         this.ballCount = 3
         this.increment = 1
-        this.runningTime = 0
+        this.score = 0
         this.running = false
     }
 
@@ -29,17 +30,18 @@ class Main {
             this.ctx.fillStyle = '#FF0000'
             this.ctx.font = '48px serif'
             this.ctx.fillText('Game over', 0, 100)
+            game.saveScore(this.score)
         } else {
             window.requestAnimationFrame(() => this.animate())
         }
     }
 
-    runTimer () {
+    runScore () {
         setTimeout(() => {
-            this.runningTime += 0.5
-            this.spanScore.innerHTML = this.runningTime * 2
             if (this.running) {
-                this.runTimer()
+                this.score += 1
+                this.spanScore.innerHTML = this.score
+                this.runScore()
             }
         }, 500)
     }
@@ -61,7 +63,7 @@ class Main {
         this.setNewBallsController()
         this.controller.addBall(this.ballCount)
         this.controller.createStaticBall()
-        this.runTimer()
+        this.runScore()
         this.addBallsInterval(5000)
         this.animate(this.controller)
     }
@@ -69,7 +71,7 @@ class Main {
     restart () {
         this.ballCount = 3
         this.increment = 1
-        this.runningTime = 0
+        this.score = 0
         this.spanScore.innerHTML = 0
         this.startGame()
     }
