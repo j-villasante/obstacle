@@ -12,7 +12,7 @@ class Config {
     get production () {
         this.session.cookie.secure = true
         this.redis = {
-            client: process.env.REDIS_URL
+            url: process.env.REDIS_URL
         }
         return this.makeConfig()
     }
