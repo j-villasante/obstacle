@@ -11,6 +11,9 @@ class Config {
 
     get production () {
         this.session.cookie.secure = true
+        this.redis = {
+            url: process.env.REDIS_URL
+        }
         return this.makeConfig()
     }
 
