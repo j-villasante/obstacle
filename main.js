@@ -19,7 +19,7 @@ if (process.env.NODE_ENV === 'production') {
     app.set('trust proxy', true)
 }
 
-config.session.store = new RedisStore(config.redis)
+//config.session.store = new RedisStore(config.redis)
 app.use(session(config.session))
 app.use(express.static('static/dist'))
 app.use(express.static('static/img'))
