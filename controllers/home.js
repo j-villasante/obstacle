@@ -20,12 +20,16 @@ class Home {
                 game.score = req.body.score
             }
         } else {
-            game = {
+            req.session.game = {
                 score: req.body.score
             }
             updated = true
         }
         res.json({ updated: updated })
+    }
+
+    clearSession (req, res) {
+        req.session.destroy()
     }
 }
 

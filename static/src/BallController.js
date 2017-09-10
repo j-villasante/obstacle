@@ -25,11 +25,11 @@ class BallController {
 
     moveBalls () {
         for (let ball of this.balls) {
-            if (ball.y + ball.vy + ball.radius > this.canvas.height || ball.y + ball.vy - ball.radius < 0) {
+            if (ball.y + ball.vy + ball.radius > this.canvas.height || ball.y + ball.vy < ball.radius) {
                 ball.vy = -ball.vy
             }
 
-            if (ball.x + ball.vx + ball.radius > this.canvas.width || ball.x + ball.vx - ball.radius < 0) {
+            if (ball.x + ball.vx + ball.radius > this.canvas.width || ball.x + ball.vx < ball.radius) {
                 ball.vx = -ball.vx
             }
             ball.move()
