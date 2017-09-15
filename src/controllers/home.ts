@@ -33,4 +33,4 @@ class Home {
     }
 }
 
-module.exports = new Home()
+export let home = new Home()

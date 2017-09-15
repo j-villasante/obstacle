@@ -1,7 +1,8 @@
-const bodyParser = require('body-parser')
+import * as bodyParser from 'body-parser'
+
 const jsonParser = bodyParser.json()
 
-function setup (app, controllers) {
+export function setup (app, controllers) {
     app.get('/', controllers.home.show)
     app.post('/game/score', jsonParser, controllers.home.updateScore)
 
@@ -9,5 +10,3 @@ function setup (app, controllers) {
         app.get('/clear', controllers.home.clearSession)
     }
 }
-
-module.exports.setup = setup

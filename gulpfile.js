@@ -15,22 +15,23 @@ const cleanCSS = require('gulp-clean-css');
 const runSequence = require('run-sequence');
 const gulpif = require('gulp-if');
 const lazypipe = require('lazypipe');
+const ts = require('gulp-typescript');
+const tsProject = ts.createProject('tsconfig.json');
 
 let prod = false;
 
-gulp.task('default', ['nodemon', 'browser-sync', 'watchers'])
+gulp.task('default', () => runSequence('build', ['nodemon', 'browser-sync', 'watch']))
 
 gulp.task('nodemon', () => {
 	nodemon({
-		script: 'main.js',
+		script: 'built/main.js',
 		ignore: ['./static/'],
 		ext: 'njk js',
-        // tasks: ['bundle'],
 		env: {
 			NODE_ENV: 'development'
 		},
 		execMap: {
-			js: "node --inspect"
+			js: 'node --inspect'
 		}
 	})
     .on('start', () => {
@@ -56,9 +57,16 @@ gulp.task('browser-sync', () => {
 
 gulp.task('reload', () => demon.emit('restart'))
 
-gulp.task('watchers', () => {
+gulp.task('watch', () => {
     gulp.watch('./static/src/**/*.js', () =>  runSequence('bundle', 'reload'))
     gulp.watch('./static/css/**/*.css', () =>  runSequence('css', 'reload'))
+    gulp.watch('./src/**/*.ts', () =>  runSequence('ts', 'reload'))
+})
+
+gulp.task('ts', () => {
+    return tsProject.src()
+        .pipe(tsProject())
+        .js.pipe(gulp.dest('./built'));
 })
 
 gulp.task('bundle', () => {
@@ -84,14 +92,14 @@ gulp.task('bundle', () => {
 
 gulp.task('css', () => {
     return gulp.src('./static/css/*.css')
-    .pipe(gulpif(!prod, sourcemaps.init()))
-    .pipe(cleanCSS())
-    .pipe(gulpif(!prod, sourcemaps.write('./')))
-    .pipe(gulp.dest('./static/dist/css/'))
+        .pipe(gulpif(!prod, sourcemaps.init()))
+        .pipe(cleanCSS())
+        .pipe(gulpif(!prod, sourcemaps.write('./')))
+        .pipe(gulp.dest('./static/dist/css/'))
 })
 
 gulp.task('set-prod', () => prod = true)
 
-gulp.task('build', ['bundle', 'css'])
+gulp.task('build', ['ts', 'bundle', 'css'])
 
 gulp.task('prod', () => runSequence('set-prod', 'build'))

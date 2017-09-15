@@ -1,0 +1,20 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "outDir": "./built",
+        "allowJs": true,
+        "target": "es6",
+        "sourceMap": true
+    },
+    "include": [
+        "./**/*"
+    ],
+    "exclude": [
+        "node_modules",
+        "./gulpfile.js",
+        "static",
+        "built"
+    ],
+    "compileOnSave": false
+}

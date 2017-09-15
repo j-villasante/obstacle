@@ -1,13 +1,16 @@
-const express = require('express')
-const nunjucks = require('nunjucks')
-const session = require('express-session')
-const RedisStore = require('connect-redis')(session)
+// Node module imports
+import * as express from 'express'
+import * as nunjucks from 'nunjucks'
+import * as session from 'express-session'
+import * as connectRedis from 'connect-redis'
 
-const setup = require('./routes.js').setup
-const controllers = require('./controllers')
+// Local imports
+import { setup } from './routes.js'
+import * as controllers from './controllers'
+import {  confBuilder } from './configs.js'
 
-const config = require('./configs.js')[process.env.NODE_ENV || 'development']
-
+const RedisStore = connectRedis(session)
+const config = confBuilder[process.env.NODE_ENV || 'development']
 const app = express()
 
 nunjucks.configure('views', {
