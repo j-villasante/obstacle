@@ -6,11 +6,11 @@ import * as connectRedis from 'connect-redis'
 
 // Local imports
 import { setup } from './routes.js'
-import * as controllers from './controllers'
-import {  confBuilder } from './configs.js'
+import { controllers } from './controllers'
+import { confBuilder } from './configs.js'
 
 const RedisStore = connectRedis(session)
-const config = confBuilder[process.env.NODE_ENV || 'development']
+const config = confBuilder.config
 const app = express()
 
 nunjucks.configure('views', {
@@ -30,6 +30,6 @@ app.set('view engine', 'njk')
 
 setup(app, controllers)
 
-app.listen(process.env.PORT || 3000, () => {
+app.listen(process.env.PORT || 3000, (): void => {
     console.log(`Example app listening on port ${process.env.PORT || 3000}!`)
 })

@@ -1,3 +1,5 @@
+import { Store } from 'express-session'
+
 interface sessionI {
     secret: string;
     resave: boolean;
@@ -6,6 +8,7 @@ interface sessionI {
     cookie: {
         secure?: boolean;
     }
+    store?: Store
 }
 
 interface redisI {
@@ -15,9 +18,9 @@ interface redisI {
     url?: string
 }
 
-interface configI {
-    session: sessionI;
-    redis: redisI;
+export interface configI {
+    session: sessionI
+    redis: redisI
 }
 
 class Config {
@@ -25,9 +28,9 @@ class Config {
         secret: 'fnONWkpu7IS28jENFKTC',
         resave: false,
         saveUninitialized: true,
-        cookie: {}
+        cookie: {},
     }
-    redis: redisI = {}
+    redis: redisI = {}    
 
     get production (): configI {
         this.session.cookie.secure = true
@@ -45,6 +48,14 @@ class Config {
             logErrors: true
         }
         return this.makeConfig()
+    }
+
+    get config (): configI {
+        if (process.env.NODE_ENV === 'production'){
+            return this.production
+        } else {
+            return this.development
+        }
     }
 
     private makeConfig (): configI {

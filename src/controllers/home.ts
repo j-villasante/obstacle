@@ -1,5 +1,19 @@
-class Home {
-    show (req, res) {
+import { Response, Request } from 'express'
+
+export class Home {
+    private static single: Home
+    private constructor() {}
+
+    static get instance (): Home {
+        if (Home.single){
+            return Home.single
+        } else{
+            Home.single = new Home
+            return Home.single
+        }
+    }
+    
+    show (req: Request, res: Response) {
         let obj = {
             score: 0
         }
@@ -11,7 +25,7 @@ class Home {
         res.render('home', obj)
     }
 
-    updateScore (req, res) {
+    updateScore (req: Request, res: Response) {
         let game = req.session.game
         let updated = false
         if (game) {
@@ -28,9 +42,10 @@ class Home {
         res.json({ updated: updated })
     }
 
-    clearSession (req, res) {
-        req.session.destroy()
+    clearSession (req: Request, res: Response) {
+        req.session.destroy((err) => {
+            if (err) res.send('Error destoying')
+            res.send('destoyed')
+        })
     }
 }
-
-export let home = new Home()
