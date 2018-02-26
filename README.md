@@ -6,3 +6,5 @@ A simple game where you need to avoid the bouncing balls to survive.
 2. Install all npm packages using `npm install`. This is necessary just each time a package has been added.
 3. Run `gulp`. The game should be accesible on [localhost:3000](http://localhost:3000) and on [localhost:3001](http://localhost:3001).
 
+## Production
+
