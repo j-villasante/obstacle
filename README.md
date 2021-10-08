@@ -1,5 +1,5 @@
 # Obstacle
-A simple game where you need to avoid the bouncing balls to survive.
+A simple game where you need to avoid the bouncing balls to survive. Check it [here](https://obstacle.maraveloos.com).
 
 ## Run locally
 1. You need gulp installed. You can install gulp using `npm install -g gulp-cli`. You only need to do this once for each computer you work on.
